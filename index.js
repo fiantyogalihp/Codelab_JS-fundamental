@@ -1,48 +1,58 @@
-import * as greatAuthors from "./OOP/reusable_function.js"; // * all import from destination file
-// import { greatAuthors, blabla.. } from "./reusable_function.js"; // * spesific import 1 or 2 import only
-import { greatAuthors as authors } from "./OOP/reusable_function.js"; // ? u can using alias in this import
-import WhatsApp from "./OOP/inheritance.js"; // * Default Import
-import { coffeeStock } from "./export_import.js";
-import {
-  createUserWithNewLastName,
-  user,
-} from "./OOP/functional_programming.js";
+// Object.getOwnPropertyNames(global);
 
-/** // * Terdapat beberapa perbedaan diantara kedua jenis export ini, antara lain:
+const initialMemoryUsage = process.memoryUsage().heapUsed; // TODO 1
+const yourName = process.argv[2]; // TODO 2
+const environment = process.env.NODE_ENV; // TODO 3
 
- // * 1. Dalam 1 module, hanya boleh ada 1 default export, sedangkan untuk named export jumlahnya boleh lebih dari 1.
- // * 2. Ketika mengimpor hasil named export, kita perlu menyertakan kurung kurawal ( { } ) diantara objek yang diimpor, sedangkan untuk default export tidak perlu.
- */
+for (let i = 0; i <= 10000; i++) {
+  // Proses looping ini akan membuat penggunaan memori naik
+}
 
-console.log("Menyalakan mesin kopi");
-console.log("Menggiling biji kopi");
-console.log("Memanaskan air");
-console.log("Mencampurkan air dan kopi");
-console.log("Menuangkan kopi ke dalam gelas");
-console.log("Menuangkan susu ke dalam gelas");
-console.log("Kopi Anda sudah siap!");
-
-// * Import
-console.log(greatAuthors.greatAuthors);
-console.log(authors);
-
-const WA = new WhatsApp("Fiyuu", "fiantiogalih@gmail.com", false);
-
-WA.sendChats(
-  "Hello There I'm Using WhatsApp!",
-  "fiantiogalih@gmail.com",
-  "Fiyuu"
+const currentMemoryUsage = process.memoryUsage().heapUsed; // TODO 4
+console.log(`Hai, ${yourName}`);
+console.log(`Mode environment: ${environment}`);
+console.log(
+  `Penggunaan memori dari ${initialMemoryUsage} naik ke ${currentMemoryUsage}`
 );
 
-const makeCoffee = (type, milligrams) => {
-  return coffeeStock[type] >= milligrams
-    ? // ? type disini dimakasudkan untuk value dari type data property nya object coffeeStock
-      "Kopi berhasil Dibuat!"
-    : "Bijih Kopi habis!";
+const coffee = require("./lib/coffee");
+
+console.log(coffee);
+
+const moment = require("moment");
+
+const date = moment().format("MMM Do YY");
+console.log(date);
+
+//----------------------------------------------------------------
+const { EventEmitter } = require("events");
+
+const myEventEmitter = new EventEmitter();
+
+// fungsi yang akan dijalankan ketika event coffee-order terjadi
+const makeCoffee = ({ name }) => {
+  console.log(`Kopi ${name} telah dibuat!`);
 };
 
-console.log(makeCoffee("robusta", 160));
+const makeBill = ({ price }) => {
+  console.log(`Bill sebesar ${price} telah dibuat!`);
+};
 
-const newUser = createUserWithNewLastName(user, "pottrer");
+const onCoffeeOrderedListener = ({ name, price }) => {
+  makeCoffee(name);
+  makeBill(price);
+};
 
-console.log(newUser);
+// mendaftarkan fungsi makeCoffee sebagai listener event coffee-order
+// myEventEmitter.on("coffee-order", makeCoffee);
+// myEventEmitter.on("coffee-order", makeBill);
+
+myEventEmitter.on("coffee-order", onCoffeeOrderedListener);
+
+// Memicu event 'coffee-order' terjadi.
+myEventEmitter.emit("coffee-order", { name: "Tubruk", price: 15000 });
+
+/**
+ * output:
+ * Kopi Tubruk telah dibuat!
+ */
